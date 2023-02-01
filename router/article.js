@@ -35,27 +35,52 @@ router.post("/newArticle", (req, res) => {
                             ],
                         })
                         .then((article) => {
-                            res.json(200).json({article: article});
+                            res.status(200).json({article: article});
                         })
                         .catch((err) => {
-                            res.json(502).json(err);
+                            res.status(502).json(err);
+                            console.log('ici')
                         })
                     })
                     .catch((err) => {
-                        res.json(502).json(err)
+                        res.status(502).json(err)
+                        console.log('hop')
                     })
                 })
                 .catch((err) => {
-                    res.json(502).json(err)
+                    res.status(502).json(err)
+                    console.log('nite')
                 })
             })
             .catch((err) => {
-                res.json(502).json(err)
+                res.status(502).json(err)
+                console.log('hola')
             })
         }
     })
     .catch((err) => {
-        res.json(502).json(err)
+        res.status(502).json(err)
+        console.log('lol')
     })
+});
+
+router.get("/nbArticlePageArticle/:limit", (req, res) => {
+    db.article
+        .findAll({
+            order: [
+                ["id", "DESC"]
+            ],
+            include: [{
+                model: db.image,
+            }, ],
+            limit: parseInt(req.params.limit),
+        })
+
+    .then((articles) => {
+            res.status(200).json({ articles: articles });
+        })
+        .catch((err) => {
+            res.status(502).json("bad req" + err);
+        });
 });
 module.exports = router
